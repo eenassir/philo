@@ -6,7 +6,7 @@
 /*   By: eenassir <eenassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 10:24:34 by eenassir          #+#    #+#             */
-/*   Updated: 2024/07/28 14:56:38 by eenassir         ###   ########.fr       */
+/*   Updated: 2024/08/13 15:39:25 by eenassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,25 @@
 #include <fcntl.h>
 #include <string.h>
 #include <pthread.h>
+#include <sys/time.h>
 
 typedef struct s_list
 {
-	int i;
-	int c;
+	int id;
+    int time_to_die;
+    int time_to_eat;
+    int time_to_sleep;
+    int times_must_eat;
+    int times_eaten;
+    pthread_mutex_t *left_fork;
+    pthread_mutex_t *right_fork;
+    long long last_meal_time;
 	struct s_list *next;
 } t_list;
 
 int ft_strlen (char *s);
 t_list *ft_lst_new(void);
-void ft_free_lst(t_list *lst);
+void ft_free_lst(t_list **lst);
+int ft_atoi(char *s);
 
 #endif

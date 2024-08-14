@@ -6,20 +6,20 @@
 /*   By: eenassir <eenassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 13:09:46 by eenassir          #+#    #+#             */
-/*   Updated: 2024/07/24 13:13:22 by eenassir         ###   ########.fr       */
+/*   Updated: 2024/08/04 11:14:33 by eenassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void ft_free_lst(t_list *lst)
+void ft_free_lst(t_list **lst)
 {
 	t_list *tmp;
 
-	while ((lst))
+	while ((*lst))
 	{
-		tmp = (lst);
-		free((lst));
-		(lst) = (lst)->next;
+		tmp = (*lst);
+		(*lst) = (*lst)->next;
+		free((tmp));
 	}
 }
