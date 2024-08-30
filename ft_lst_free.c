@@ -6,7 +6,7 @@
 /*   By: eenassir <eenassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 13:09:46 by eenassir          #+#    #+#             */
-/*   Updated: 2024/08/04 11:14:33 by eenassir         ###   ########.fr       */
+/*   Updated: 2024/08/16 19:37:27 by eenassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void ft_free_lst(t_list **lst)
 	while ((*lst))
 	{
 		tmp = (*lst);
-		(*lst) = (*lst)->next;
+		// (*lst) = (*lst)->next;
 		free((tmp));
 	}
 }

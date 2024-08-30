@@ -1,12 +1,12 @@
 NAME = philo
 
-SRC = ft_strlen.c philo.c ft_lst_new.c ft_lst_free.c ft_atoi.c
+SRC = ft_strlen.c philo.c ft_lst_new.c ft_lst_free.c ft_atoi.c ft_strcmp.c
 
 OBJ = $(SRC:.c=.o)
 
 CC = cc
 
-CFLAGS = #-fsanitize=address#-Wall -Wextra -Werror 
+CFLAGS = -fsanitize=thread #-Wall -Wextra -Werror
 
 all:$(NAME)
 $(NAME):$(OBJ)
