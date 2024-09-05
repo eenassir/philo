@@ -6,11 +6,11 @@
 /*   By: eenassir <eenassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 09:05:33 by eenassir          #+#    #+#             */
-/*   Updated: 2024/08/15 10:46:06 by eenassir         ###   ########.fr       */
+/*   Updated: 2024/09/04 18:38:02 by eenassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../includes/libft.h"
 
 int ft_atoi(char *s)
 {

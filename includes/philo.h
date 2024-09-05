@@ -1,24 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lst_new.c                                       :+:      :+:    :+:   */
+/*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eenassir <eenassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/24 12:18:59 by eenassir          #+#    #+#             */
-/*   Updated: 2024/08/16 19:37:18 by eenassir         ###   ########.fr       */
+/*   Created: 2024/07/24 10:24:34 by eenassir          #+#    #+#             */
+/*   Updated: 2024/09/05 01:10:17 by eenassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#ifndef PHILO_H
+# define PHILO_H
 
-t_list *ft_lst_new(void)
-{
-	t_list *new;
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <fcntl.h>
+#include <string.h>
+#include <pthread.h>
+#include <sys/time.h>
+#include "structs.h"
 
-	new = (t_list *)malloc(sizeof (t_list));
-	if (!new)
-		return (NULL);
-	// new->next = NULL;
-	return (new);
-}
+long long get_current_time(void);
+
+#include "libft.h"
+
+#endif

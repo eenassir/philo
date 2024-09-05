@@ -1,23 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcmp.c                                        :+:      :+:    :+:   */
+/*   ft_lst_new.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eenassir <eenassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/24 20:47:49 by eenassir          #+#    #+#             */
-/*   Updated: 2024/08/24 20:49:32 by eenassir         ###   ########.fr       */
+/*   Created: 2024/07/24 12:18:59 by eenassir          #+#    #+#             */
+/*   Updated: 2024/09/04 18:27:21 by eenassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../includes/libft.h"
 
-int ft_strcmp(char *s1, char *s2)
+t_list *ft_lst_new(void)
 {
-	int i;
+	t_list *new;
 
-	i = 0;
-	while (s1[i] && s1[i] == s2[i])
-		i++;
-	return (s1[i] - s2[i]);
+	new = (t_list *)malloc(sizeof (t_list));
+	if (!new)
+		return (NULL);
+	// new->next = NULL;
+	return (new);
 }

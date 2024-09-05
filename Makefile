@@ -1,18 +1,20 @@
 NAME = philo
 
-SRC = ft_strlen.c philo.c ft_lst_new.c ft_lst_free.c ft_atoi.c ft_strcmp.c
+libft = libft/ft_strlen.c libft/ft_lst_new.c libft/ft_lst_free.c libft/ft_atoi.c libft/ft_strcmp.c
 
-OBJ = $(SRC:.c=.o)
+SRC = philo.c philo_utils/get_current_time.c
+
+OBJ = $(SRC:.c=.o) $(libft:.c=.o)
 
 CC = cc
 
-CFLAGS = -fsanitize=thread #-Wall -Wextra -Werror
+CFLAGS = #-fsanitize=address #-Wall -Wextra -Werror
 
 all:$(NAME)
 $(NAME):$(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
 
-%.o: %.c philo.h
+%.o: %.c /includes/philo.h
 	$(CC) $(CFLAGS) -c $<
 
 clean:

@@ -1,25 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lst_free.c                                      :+:      :+:    :+:   */
+/*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eenassir <eenassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/24 13:09:46 by eenassir          #+#    #+#             */
-/*   Updated: 2024/08/16 19:37:27 by eenassir         ###   ########.fr       */
+/*   Created: 2024/09/04 18:12:23 by eenassir          #+#    #+#             */
+/*   Updated: 2024/09/04 19:38:51 by eenassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef LIBFT_H
+# define LIBFT_H
+
 #include "philo.h"
 
-void ft_free_lst(t_list **lst)
-{
-	t_list *tmp;
+int ft_strlen (char *s);
+t_list *ft_lst_new(void);
+void ft_free_lst(t_list **lst);
+int ft_atoi(char *s);
+int ft_strcmp(char *s1, char *s2);
 
-	while ((*lst))
-	{
-		tmp = (*lst);
-		// (*lst) = (*lst)->next;
-		free((tmp));
-	}
-}
+#endif
