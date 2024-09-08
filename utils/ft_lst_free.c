@@ -1,25 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcmp.c                                        :+:      :+:    :+:   */
+/*   ft_lst_free.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eenassir <eenassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/24 20:47:49 by eenassir          #+#    #+#             */
-/*   Updated: 2024/09/04 18:27:31 by eenassir         ###   ########.fr       */
+/*   Created: 2024/07/24 13:09:46 by eenassir          #+#    #+#             */
+/*   Updated: 2024/09/08 11:44:32 by eenassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/libft.h"
+#include "../includes/utils.h"
 
-int ft_strcmp(char *s1, char *s2)
+void ft_free_lst(t_list **lst)
 {
-	int i;
+	t_list *tmp;
 
-	i = 0;
-	if (!s1)
-		return (-1);
-	while (s1[i] && s1[i] == s2[i])
-		i++;
-	return (s1[i] - s2[i]);
+	while ((*lst))
+	{
+		tmp = (*lst);
+		// (*lst) = (*lst)->next;
+		free((tmp));
+	}
 }

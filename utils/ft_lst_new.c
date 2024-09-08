@@ -6,11 +6,11 @@
 /*   By: eenassir <eenassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 12:18:59 by eenassir          #+#    #+#             */
-/*   Updated: 2024/09/04 18:27:21 by eenassir         ###   ########.fr       */
+/*   Updated: 2024/09/08 11:44:40 by eenassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/libft.h"
+#include "../includes/utils.h"
 
 t_list *ft_lst_new(void)
 {

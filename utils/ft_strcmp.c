@@ -1,24 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   libft.h                                            :+:      :+:    :+:   */
+/*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eenassir <eenassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/04 18:12:23 by eenassir          #+#    #+#             */
-/*   Updated: 2024/09/04 19:38:51 by eenassir         ###   ########.fr       */
+/*   Created: 2024/08/24 20:47:49 by eenassir          #+#    #+#             */
+/*   Updated: 2024/09/08 11:44:47 by eenassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIBFT_H
-# define LIBFT_H
+#include "../includes/utils.h"
 
-#include "philo.h"
+int ft_strcmp(char *s1, char *s2)
+{
+	int i;
 
-int ft_strlen (char *s);
-t_list *ft_lst_new(void);
-void ft_free_lst(t_list **lst);
-int ft_atoi(char *s);
-int ft_strcmp(char *s1, char *s2);
-
-#endif
+	i = 0;
+	if (!s1)
+		return (-1);
+	while (s1[i] && s1[i] == s2[i])
+		i++;
+	return (s1[i] - s2[i]);
+}

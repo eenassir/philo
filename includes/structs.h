@@ -6,7 +6,7 @@
 /*   By: eenassir <eenassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 19:33:17 by eenassir          #+#    #+#             */
-/*   Updated: 2024/09/05 12:08:41 by eenassir         ###   ########.fr       */
+/*   Updated: 2024/09/08 11:46:35 by eenassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,34 +17,35 @@
 
 typedef struct s_init
 {
+    long start;
+    int is_died;
     int num_philo;
     int time_to_die;
     int time_to_sleep;
     int time_to_eat;
     int meals_must_eat;
-    long long start;
+    pthread_mutex_t write_mutex;
 } t_init;
 
 typedef struct s_list {
-    int id;                              // Philosopher's ID
+    long run;
+    int  id;                              // Philosopher's ID
     int num_philo;
     int flag;
-    int stop_simul;                    // Total number of philosophers
-    long long time_to_die;               // Time (in ms) a philosopher can survive without eating
-    long long time_to_eat;               // Time (in ms) a philosopher spends eating
-    long long time_to_sleep;             // Time (in ms) a philosopher spends sleeping
-    int times_must_eat;                  // Number of times a philosopher must eat (optional)
-    int times_eaten;                     // Number of times the philosopher has eaten
-    long long last_meal_time;            // Timestamp of the last time the philosopher ate
-    long long start;                     // Start time of the simulation
-    pthread_mutex_t *left_fork;          // Pointer to the left fork (mutex)
-    pthread_mutex_t *right_fork;         // Pointer to the right fork (mutex)
-    pthread_mutex_t *output_lock;        // Mutex for synchronizing output (printing)
-    pthread_mutex_t meal_time_lock;      // Mutex for protecting access to last_meal_time
-    pthread_mutex_t sim_running_lock;    // Mutex for protecting access to simulation_running
+    int stop_simul;                    
+    long time_to_die;
+    long time_to_eat;  
+    long time_to_sleep;
+    int times_must_eat;     
+    int times_eaten;                   
+    long last_meal_time;          
+    pthread_mutex_t *left_fork;        
+    pthread_mutex_t *right_fork;       
+    pthread_mutex_t *output_lock;      
+    pthread_mutex_t meal_time_lock;    
+    pthread_mutex_t sim_running_lock;  
     int *simulation_running;
-    int i;  
-    t_init *init;          // Flag to indicate if the simulation is running
+    t_init *init;
 } t_list;
 
 #endif

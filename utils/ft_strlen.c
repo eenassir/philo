@@ -1,25 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lst_free.c                                      :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eenassir <eenassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/24 13:09:46 by eenassir          #+#    #+#             */
-/*   Updated: 2024/09/04 18:27:09 by eenassir         ###   ########.fr       */
+/*   Created: 2024/07/24 10:21:15 by eenassir          #+#    #+#             */
+/*   Updated: 2024/09/08 11:44:55 by eenassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/libft.h"
+#include "../includes/utils.h"
 
-void ft_free_lst(t_list **lst)
+int ft_strlen(char *s)
 {
-	t_list *tmp;
+	int i;
 
-	while ((*lst))
-	{
-		tmp = (*lst);
-		// (*lst) = (*lst)->next;
-		free((tmp));
-	}
+	i = 0;
+	while (s[i])
+		i++;
+	return (i);
 }
