@@ -6,7 +6,7 @@
 /*   By: eenassir <eenassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 19:33:17 by eenassir          #+#    #+#             */
-/*   Updated: 2024/09/08 11:46:35 by eenassir         ###   ########.fr       */
+/*   Updated: 2024/09/10 19:44:32 by eenassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,19 @@ typedef struct s_init
     int time_to_sleep;
     int time_to_eat;
     int meals_must_eat;
+    int stop_simul;                    
     pthread_mutex_t write_mutex;
+    pthread_mutex_t time;
+    pthread_mutex_t lock_stop;
 } t_init;
 
 typedef struct s_list {
+    pthread_t t;
+    int *is_died;
     long run;
     int  id;                              // Philosopher's ID
     int num_philo;
     int flag;
-    int stop_simul;                    
     long time_to_die;
     long time_to_eat;  
     long time_to_sleep;

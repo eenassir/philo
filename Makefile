@@ -8,7 +8,7 @@ OBJ = $(SRC:.c=.o) $(utils:.c=.o)
 
 CC = cc
 
-CFLAGS = #-fsanitize=address -Wall -Wextra -Werror #-fsanitize=thread
+# CFLAGS = -fsanitize=thread -g
 
 all:$(NAME)
 $(NAME):$(OBJ)
