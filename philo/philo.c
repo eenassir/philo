@@ -6,7 +6,7 @@
 /*   By: eenassir <eenassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 21:04:57 by eenassir          #+#    #+#             */
-/*   Updated: 2024/09/11 00:22:12 by eenassir         ###   ########.fr       */
+/*   Updated: 2024/09/11 00:36:10 by eenassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void *life_cycle(void *arg)
         pthread_mutex_unlock(&philo->init->lock_stop);
         return (NULL);}
     if (philo->id % 2 == 0)
-        usleep(100);
+        usleep(200);
     pthread_mutex_unlock(&philo->init->lock_stop);
     int i = 0;
     while (1)
@@ -182,7 +182,6 @@ int ft_philo(int ac, char **av)
     while (i < init->num_philo)
     {
         philo[i].run = init->start;
-        
         i++;
     }
     i = 0;
