@@ -6,7 +6,7 @@
 /*   By: eenassir <eenassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 19:33:17 by eenassir          #+#    #+#             */
-/*   Updated: 2024/09/10 19:44:32 by eenassir         ###   ########.fr       */
+/*   Updated: 2024/09/11 11:41:20 by eenassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ typedef struct s_init
 } t_init;
 
 typedef struct s_list {
-    pthread_t t;
+    pthread_t *t;
     int *is_died;
     long run;
     int  id;                              // Philosopher's ID

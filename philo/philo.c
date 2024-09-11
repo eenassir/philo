@@ -6,7 +6,7 @@
 /*   By: eenassir <eenassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 21:04:57 by eenassir          #+#    #+#             */
-/*   Updated: 2024/09/11 00:36:10 by eenassir         ###   ########.fr       */
+/*   Updated: 2024/09/11 14:54:45 by eenassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,22 @@ void ft_usleep(int time)
 
 	start = get_current_time();
 	while (get_current_time() - start < time)
-		usleep(50);
+		usleep(99);
 }
 void print_msg(char *s, t_list *philo)
 {
-    pthread_mutex_lock(&philo->init->write_mutex);
-    printf ("%d %d %s\n", (int)(get_current_time() - philo->run), philo->id, s);
-    pthread_mutex_unlock(&philo->init->write_mutex);
+    // if (philo->init->stop_simul != 1)
+    // {
+        pthread_mutex_lock(&philo->init->write_mutex); // kola wa7d
+        printf ("%d %d %s\n", (int)(get_current_time() - philo->run), philo->id, s);
+        pthread_mutex_unlock(&philo->init->write_mutex);
+    // }
 }
 
 void *ft_monitor(void *arg)
 {
     t_list *philo = (t_list *)arg;
+    // int stop_simul;
     int i;
 
     while (1)
@@ -40,14 +44,16 @@ void *ft_monitor(void *arg)
         while (i < philo->init->num_philo)
         {
             pthread_mutex_lock(&philo->init->time);
-            if (((int)(get_current_time() - philo->run) - philo[i].last_meal_time) > (int)philo->time_to_die)
+            if (((int)(get_current_time() - philo->run) - philo[i].last_meal_time) >= (int)philo->time_to_die)
             {
-                pthread_mutex_unlock(&philo->init->time);
+                pthread_mutex_lock(&philo->init->write_mutex);
 				philo->init->stop_simul = 1;
-                
-            pthread_mutex_lock(&philo->init->write_mutex);
-            printf("%lld %d*******has died***\n", (get_current_time() - philo[i].run), philo[i].id);
+                pthread_mutex_unlock(&philo->init->time);
+                printf("%lld %d*******has died***\n", (get_current_time() - philo[i].run), philo[i].id);
                 return NULL;
+                // pthread_mutex_unlock(&philo->init->lock_stop);
+                
+                // pthread_mutex_lock(&philo->init->write_mutex);
             }
              pthread_mutex_unlock(&philo->init->time);
             i++;
@@ -67,27 +73,21 @@ void *ft_monitor(void *arg)
 
 void *life_cycle(void *arg)
 {
+    int         stop_simul;
     t_list *philo = (t_list *)arg;
-    
-    static int check = 0;
-    pthread_mutex_lock(&philo->init->lock_stop);
-    if (check == 1 ){
-        pthread_mutex_unlock(&philo->init->lock_stop);
-        return (NULL);}
+
+
     if (philo->id % 2 == 0)
-        usleep(200);
-    pthread_mutex_unlock(&philo->init->lock_stop);
+        usleep(200); // time_eat;
+    // pthread_mutex_unlock(&philo->init->lock_stop);
     int i = 0;
     while (1)
     {
         pthread_mutex_lock(&philo->init->lock_stop);
-        // printf("[%d]\n",philo->init->stop_simul);
-        if (philo->init->stop_simul == 1){
-             check = 1;
-             pthread_mutex_unlock(&philo->init->lock_stop);
-            return (NULL);
-            }
+        stop_simul = philo->init->stop_simul;
         pthread_mutex_unlock(&philo->init->lock_stop);
+        if (stop_simul == 1)
+            return (NULL);
         pthread_mutex_lock(philo->left_fork);
         print_msg("has taken a fork", philo);
         pthread_mutex_lock(philo->right_fork);
@@ -97,13 +97,15 @@ void *life_cycle(void *arg)
         pthread_mutex_lock(&philo->init->time);
         philo->last_meal_time = get_current_time() - philo->run;
         philo->times_must_eat--;
-    
         pthread_mutex_unlock(&philo->init->time);
         pthread_mutex_unlock(philo->right_fork);
         pthread_mutex_unlock(philo->left_fork);
-        pthread_mutex_unlock(&philo->init->lock_stop);
-        ft_usleep(philo->time_to_sleep);
+        // pthread_mutex_unlock(&philo->init->lock_stop); // ** 
         print_msg("is sleeping", philo);
+        // if (stop_simul == 1)
+        ft_usleep(philo->time_to_sleep);
+        if (stop_simul == 1)
+            return (NULL);
         print_msg("is thinking", philo);
     }
     return (NULL);
@@ -188,10 +190,15 @@ int ft_philo(int ac, char **av)
     while (i < init->num_philo)
     {
         pthread_create(&th[i], NULL, life_cycle, &philo[i]);
-        pthread_detach(th[i]);
         i++;
     }
     ft_monitor(philo);
+    i = 0;
+    while (i< init->num_philo)
+    {
+        pthread_detach(th[i]);
+        i++;
+    }
     return (0);
 }
 
