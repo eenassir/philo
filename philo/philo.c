@@ -6,7 +6,7 @@
 /*   By: eenassir <eenassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 21:04:57 by eenassir          #+#    #+#             */
-/*   Updated: 2024/09/11 14:54:45 by eenassir         ###   ########.fr       */
+/*   Updated: 2024/09/15 11:41:19 by eenassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void ft_usleep(int time)
 
 	start = get_current_time();
 	while (get_current_time() - start < time)
-		usleep(99);
+		usleep(50);
 }
 void print_msg(char *s, t_list *philo)
 {
@@ -31,6 +31,31 @@ void print_msg(char *s, t_list *philo)
     // }
 }
 
+int meal(t_list *philo)
+{
+    int i;
+    int full;
+    
+    i = 0;
+    full = 0;
+    pthread_mutex_lock(&philo->init->time);
+    while (i < philo->num_philo)
+    {
+        if (philo[i].times_must_eat == 0)
+        {
+            full++;
+        }  
+        i++;
+    }
+    if (full == philo->num_philo)
+    {
+        pthread_mutex_unlock(&philo->init->time);
+        return (1);   
+    }
+    pthread_mutex_unlock(&philo->init->time);
+    return (0);
+}
+
 void *ft_monitor(void *arg)
 {
     t_list *philo = (t_list *)arg;
@@ -39,8 +64,9 @@ void *ft_monitor(void *arg)
 
     while (1)
     {
+        // if (meal(philo))
+        //     return (NULL);
         i = 0;
-        
         while (i < philo->init->num_philo)
         {
             pthread_mutex_lock(&philo->init->time);
@@ -49,7 +75,7 @@ void *ft_monitor(void *arg)
                 pthread_mutex_lock(&philo->init->write_mutex);
 				philo->init->stop_simul = 1;
                 pthread_mutex_unlock(&philo->init->time);
-                printf("%lld %d*******has died***\n", (get_current_time() - philo[i].run), philo[i].id);
+                printf("%lld %d has died\n", (get_current_time() - philo[i].run), philo[i].id);
                 return NULL;
                 // pthread_mutex_unlock(&philo->init->lock_stop);
                 
@@ -75,22 +101,27 @@ void *life_cycle(void *arg)
 {
     int         stop_simul;
     t_list *philo = (t_list *)arg;
+    int i;
 
 
     if (philo->id % 2 == 0)
-        usleep(200); // time_eat;
-    // pthread_mutex_unlock(&philo->init->lock_stop);
-    int i = 0;
+        usleep(philo->time_to_eat);
+        
+    i = 0;
     while (1)
     {
+        if (philo->times_must_eat <= 0)
+        {
+            break ;
+        }
         pthread_mutex_lock(&philo->init->lock_stop);
         stop_simul = philo->init->stop_simul;
         pthread_mutex_unlock(&philo->init->lock_stop);
-        if (stop_simul == 1)
-            return (NULL);
         pthread_mutex_lock(philo->left_fork);
+        
         print_msg("has taken a fork", philo);
         pthread_mutex_lock(philo->right_fork);
+        
         print_msg("has taken a fork", philo);
         print_msg("is eating", philo);
         ft_usleep(philo->time_to_eat);
@@ -98,14 +129,12 @@ void *life_cycle(void *arg)
         philo->last_meal_time = get_current_time() - philo->run;
         philo->times_must_eat--;
         pthread_mutex_unlock(&philo->init->time);
+        
         pthread_mutex_unlock(philo->right_fork);
+        
         pthread_mutex_unlock(philo->left_fork);
-        // pthread_mutex_unlock(&philo->init->lock_stop); // ** 
         print_msg("is sleeping", philo);
-        // if (stop_simul == 1)
         ft_usleep(philo->time_to_sleep);
-        if (stop_simul == 1)
-            return (NULL);
         print_msg("is thinking", philo);
     }
     return (NULL);
@@ -153,12 +182,11 @@ int ft_philo(int ac, char **av)
     n = ft_atoi(av[1]);
     if (n == -1)
         return (-1);
-    th = (pthread_t *)malloc(sizeof (pthread_t) * ft_atoi(av[1]));
+    th = (pthread_t *)malloc(sizeof (pthread_t) * n);
     if (!th)
         return -1;
     t_list *philo = malloc(sizeof(t_list) * n);
     t_init *init = malloc(sizeof(t_init));
-    init->is_died = 0;
     init->num_philo = ft_atoi(av[1]);
     init->time_to_die = ft_atoi(av[2]);
     init->time_to_eat = ft_atoi(av[3]);
