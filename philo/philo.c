@@ -6,32 +6,30 @@
 /*   By: eenassir <eenassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 21:04:57 by eenassir          #+#    #+#             */
-/*   Updated: 2024/09/15 11:41:19 by eenassir         ###   ########.fr       */
+/*   Updated: 2024/09/19 12:10:34 by eenassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/philo.h"
 
 
-void ft_usleep(int time)
+void ft_usleep(long time)
 {
 	long start;
 
 	start = get_current_time();
-	while (get_current_time() - start < time)
-		usleep(50);
-}
-void print_msg(char *s, t_list *philo)
-{
-    // if (philo->init->stop_simul != 1)
-    // {
-        pthread_mutex_lock(&philo->init->write_mutex); // kola wa7d
-        printf ("%d %d %s\n", (int)(get_current_time() - philo->run), philo->id, s);
-        pthread_mutex_unlock(&philo->init->write_mutex);
-    // }
+	while ((get_current_time() - start) < time)
+		usleep(30);
 }
 
-int meal(t_list *philo)
+void print_msg(char *s, t_list *philo)
+{
+        pthread_mutex_lock(&philo->init->write_mutex);
+        printf ("%d %d %s\n", (int)(get_current_time() - philo->run), philo->id, s);
+        pthread_mutex_unlock(&philo->init->write_mutex);
+}
+
+int ft_meals(t_list *philo)
 {
     int i;
     int full;
@@ -50,7 +48,7 @@ int meal(t_list *philo)
     if (full == philo->num_philo)
     {
         pthread_mutex_unlock(&philo->init->time);
-        return (1);   
+        return (1);
     }
     pthread_mutex_unlock(&philo->init->time);
     return (0);
@@ -59,41 +57,28 @@ int meal(t_list *philo)
 void *ft_monitor(void *arg)
 {
     t_list *philo = (t_list *)arg;
-    // int stop_simul;
     int i;
 
     while (1)
     {
-        // if (meal(philo))
-        //     return (NULL);
+        if (ft_meals(philo) == 1)
+            return (NULL);
         i = 0;
         while (i < philo->init->num_philo)
         {
             pthread_mutex_lock(&philo->init->time);
-            if (((int)(get_current_time() - philo->run) - philo[i].last_meal_time) >= (int)philo->time_to_die)
+            if (((get_current_time() - philo->run) - philo[i].last_meal_time) >= philo->time_to_die)
             {
                 pthread_mutex_lock(&philo->init->write_mutex);
 				philo->init->stop_simul = 1;
                 pthread_mutex_unlock(&philo->init->time);
                 printf("%lld %d has died\n", (get_current_time() - philo[i].run), philo[i].id);
                 return NULL;
-                // pthread_mutex_unlock(&philo->init->lock_stop);
-                
-                // pthread_mutex_lock(&philo->init->write_mutex);
             }
              pthread_mutex_unlock(&philo->init->time);
             i++;
         }
-        // pthread_mutex_lock(&philo->init->lock_stop);
-        // if (philo->init->stop_simul == 1)
-        // {
-        //     pthread_mutex_unlock(&philo->init->lock_stop);
-        //     break  ;
-        // }
-        // pthread_mutex_unlock(&philo->init->lock_stop);
     }
-    // if (philo->init->stop_simul == 1)
-    //     exit(0);
 	return (NULL);
 }
 
@@ -105,34 +90,29 @@ void *life_cycle(void *arg)
 
 
     if (philo->id % 2 == 0)
-        usleep(philo->time_to_eat);
+        usleep(1000);
         
     i = 0;
     while (1)
     {
-        if (philo->times_must_eat <= 0)
-        {
+        if (philo->times_must_eat == 0)
             break ;
-        }
-        pthread_mutex_lock(&philo->init->lock_stop);
-        stop_simul = philo->init->stop_simul;
-        pthread_mutex_unlock(&philo->init->lock_stop);
         pthread_mutex_lock(philo->left_fork);
-        
         print_msg("has taken a fork", philo);
         pthread_mutex_lock(philo->right_fork);
         
         print_msg("has taken a fork", philo);
         print_msg("is eating", philo);
+        
         ft_usleep(philo->time_to_eat);
         pthread_mutex_lock(&philo->init->time);
-        philo->last_meal_time = get_current_time() - philo->run;
         philo->times_must_eat--;
+        philo->last_meal_time = (get_current_time() - philo->run);
         pthread_mutex_unlock(&philo->init->time);
         
+        pthread_mutex_unlock(philo->left_fork);
         pthread_mutex_unlock(philo->right_fork);
         
-        pthread_mutex_unlock(philo->left_fork);
         print_msg("is sleeping", philo);
         ft_usleep(philo->time_to_sleep);
         print_msg("is thinking", philo);
@@ -175,16 +155,13 @@ void *ft_loop(t_init *init, t_list *philo)
 int ft_philo(int ac, char **av)
 {
     pthread_t monitor;
-    pthread_t *th;
     int i;
     int n;
 
     n = ft_atoi(av[1]);
     if (n == -1)
         return (-1);
-    th = (pthread_t *)malloc(sizeof (pthread_t) * n);
-    if (!th)
-        return -1;
+    pthread_t th[n];
     t_list *philo = malloc(sizeof(t_list) * n);
     t_init *init = malloc(sizeof(t_init));
     init->num_philo = ft_atoi(av[1]);
