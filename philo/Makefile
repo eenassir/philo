@@ -8,9 +8,10 @@ OBJ = $(SRC:.c=.o) $(utils:.c=.o)
 
 CC = cc
 
-CFLAGS = #-fsanitize=thread -g
+CFLAGS = #-g -fsanitize=thread
 
 all:$(NAME)
+
 $(NAME):$(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
 
