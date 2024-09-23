@@ -1,23 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_parcing.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eenassir <eenassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/24 10:21:15 by eenassir          #+#    #+#             */
-/*   Updated: 2024/09/21 15:08:53 by eenassir         ###   ########.fr       */
+/*   Created: 2024/09/21 12:19:26 by eenassir          #+#    #+#             */
+/*   Updated: 2024/09/23 14:41:42 by eenassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/utils.h"
+#include "../includes/philo.h"
 
-int	ft_strlen(char *s)
+int	ft_parcing(int ac, char **av)
 {
 	int	i;
+	int	j;
 
-	i = 0;
-	while (s[i])
+	i = 1;
+	while (i < ac - 1)
+	{
+		j = 0;
+		while (av[i][j])
+		{
+			if (!(av[i][j] >= '0' && av[i][j] <= '9') && av[i][0] != '+')
+				return (printf ("Error\n"), -1);
+			j++;
+		}
 		i++;
-	return (i);
+	}
+	return (0);
 }

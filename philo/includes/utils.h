@@ -6,17 +6,16 @@
 /*   By: eenassir <eenassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 18:12:23 by eenassir          #+#    #+#             */
-/*   Updated: 2024/09/11 12:39:41 by eenassir         ###   ########.fr       */
+/*   Updated: 2024/09/21 15:08:33 by eenassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIBFT_H
-# define LIBFT_H
+#ifndef UTILS_H
+# define UTILS_H
 
-#include "philo.h"
+# include "philo.h"
 
-int ft_strlen (char *s);
-int ft_atoi(char *s);
-int ft_strcmp(char *s1, char *s2);
+int	ft_strlen(char *s);
+int	ft_atoi(char *s);
 
 #endif

@@ -1,14 +1,16 @@
 NAME = philo
 
-utils = utils/ft_strlen.c utils/ft_atoi.c utils/ft_strcmp.c
+utils = utils/ft_strlen.c utils/ft_atoi.c
 
-SRC = philo.c philo_utils/get_current_time.c
+SRC = philo.c philo_utils/get_current_time.c philo_utils/ft_usleep.c \
+philo_utils/ft_monitor.c philo_utils/print_msg.c philo_utils/ft_parcing.c\
+philo_utils/ft_num.c philo_utils/ft_loop.c
 
 OBJ = $(SRC:.c=.o) $(utils:.c=.o)
 
 CC = cc
 
-CFLAGS = #-g -fsanitize=thread
+CFLAGS = -Wall -Wextra -Werror
 
 all:$(NAME)
 

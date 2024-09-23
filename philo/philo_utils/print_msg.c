@@ -1,21 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_current_time.c                                 :+:      :+:    :+:   */
+/*   print_msg.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eenassir <eenassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/04 19:27:46 by eenassir          #+#    #+#             */
-/*   Updated: 2024/09/21 17:34:14 by eenassir         ###   ########.fr       */
+/*   Created: 2024/09/21 12:16:28 by eenassir          #+#    #+#             */
+/*   Updated: 2024/09/23 14:36:56 by eenassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
-long long	get_current_time(void)
+void	print_msg(char *s, t_list *philo)
 {
-	struct timeval	time;
-
-	gettimeofday(&time, NULL);
-	return (time.tv_sec * 1000 + time.tv_usec / 1000);
+	pthread_mutex_lock(&philo->init->time);
+	if (philo->init->stop_simul == 1)
+	{
+		pthread_mutex_unlock(&philo->init->time);
+		return ;
+	}
+	pthread_mutex_unlock(&philo->init->time);
+	pthread_mutex_lock(&philo->init->write_mutex);
+	printf ("%lld %d %s\n",
+		(get_current_time() - philo->run), philo->id, s);
+	pthread_mutex_unlock(&philo->init->write_mutex);
 }
