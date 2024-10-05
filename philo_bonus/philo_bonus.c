@@ -6,7 +6,7 @@
 /*   By: eenassir <eenassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 14:58:18 by eenassir          #+#    #+#             */
-/*   Updated: 2024/10/05 13:22:19 by eenassir         ###   ########.fr       */
+/*   Updated: 2024/10/05 15:58:44 by eenassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,32 +31,50 @@ void ft_usleep(long time)
 
 void ft_printf(char *s, t_list *philo)
 {
-	sem_wait(philo->data->sem_w);
-	printf ("%ld %d %s\n", (g_c_t() - philo->data->run_time), philo->id, s);
-	sem_post(philo->data->sem_w);
+	if (philo->data->stop_sim == 0)
+	{
+		sem_wait(philo->data->sem_w);
+		printf ("%ld %d %s\n", (g_c_t() - philo->data->run_time), philo->id, s);
+		sem_post(philo->data->sem_w);
+	}
 }
 
-void ft_monitor(t_list *philo)
+void *ft_monitor(void *arg)
 {
-	sem_wait(philo->data->sem_time);
-	if ((g_c_t() - philo->data->run_time) - philo->last_meal_time >= philo->data->time_to_die)
-	{
-		printf("======%d\n", philo->data->stop_sim);
-		philo->data->stop_sim = 1;
-		printf ("%ld %d is died\n", (g_c_t() - philo->data->run_time), philo->id);
-		puts("haaha");
-		sem_post(philo->data->sem_time);
-		return ;
-	}
-	sem_post(philo->data->sem_time);
-	return ;
+	t_list *philo;
+
+	philo = (t_list *)arg;
+	int i;
+
+	i = 0;
+		while (i < philo->data->num)
+		{
+			sem_wait(philo->data->sem_time);
+			if ((g_c_t() - philo->data->run_time) - philo[i].last_meal_time >= philo->data->time_to_die)
+			{
+				philo->data->stop_sim = 1;
+				printf ("%ld %d is died\n", (g_c_t() - philo->data->run_time), philo[i].id);
+				sem_post(philo->data->sem_time);
+				return (NULL);
+			}
+			sem_post(philo->data->sem_time);
+			i++;
+		}
+	return (NULL);
 }
+
+
 void life(t_list *philo)
 {
-	if (philo->id % 2 == 0)
-		ft_usleep(philo->data->time_to_eat + 2);
 	while (1)
-	{		
+	{
+		sem_wait(philo->data->sem_time);
+		if (philo->data->stop_sim == 1)
+		{
+			sem_post(philo->data->sem_time);
+			exit (0);
+		}
+		sem_post(philo->data->sem_time);
 		sem_wait(philo->data->fork);
 		ft_printf("has take a fork", philo);
 		sem_wait(philo->data->fork);
@@ -97,8 +115,8 @@ void ft_init(int *infos)
 	part->sem_w = sem_open("/sem_w", O_CREAT, 0644, 1);
 	if (part->sem_w == SEM_FAILED)
 		return ;
-		part->sem_w = sem_open("/sem_time", O_CREAT, 0644, 1);
-	if (part->sem_w == SEM_FAILED)
+	part->sem_time = sem_open("/sem_time", O_CREAT, 0644, 1);
+	if (part->sem_time == SEM_FAILED)
 		return ;
 	part->sem_death = sem_open("/death", O_CREAT, 0644, 1);
 	if (part->fork == SEM_FAILED)
@@ -117,6 +135,7 @@ void ft_init(int *infos)
 	}
 	part->run_time = g_c_t();
 	part->stop_sim = 0;
+		ft_monitor(philo);
 	i = 0;
 	while (i < infos[0])
 	{
@@ -127,11 +146,12 @@ void ft_init(int *infos)
 			return ;
 		}
 		else if (philo[i].pid == 0)
+		{
 			life(&philo[i]);
-		pthread_create(philo->lock, NULL, ft_monitor, &philo);
+			pthread_create(&philo[i].lock, NULL, ft_monitor, philo);
+		}
 		i++;
 	}
-	
 	while (wait(NULL) != -1)
 		;
 }

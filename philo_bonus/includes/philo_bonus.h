@@ -6,7 +6,7 @@
 /*   By: eenassir <eenassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 14:55:46 by eenassir          #+#    #+#             */
-/*   Updated: 2024/10/05 13:21:14 by eenassir         ###   ########.fr       */
+/*   Updated: 2024/10/05 14:46:00 by eenassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 #include <semaphore.h>
 #include <stdlib.h>
 #include <signal.h>
+#include <pthread.h>
 
 typedef struct s_data
 {
