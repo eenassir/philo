@@ -1,32 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_usleep.c                                        :+:      :+:    :+:   */
+/*   join.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eenassir <eenassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/21 10:28:11 by eenassir          #+#    #+#             */
-/*   Updated: 2024/10/05 13:24:16 by eenassir         ###   ########.fr       */
+/*   Created: 2024/10/04 21:02:29 by eenassir          #+#    #+#             */
+/*   Updated: 2024/10/04 21:06:01 by eenassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
-void	ft_usleep(long time, t_list *philo)
+void join(pthread_t *th, t_init *init)
 {
-	long	start;
-	
-	
-	start = get_current_time();
-	while ((get_current_time() - start) < time)
-	{
-		pthread_mutex_lock(&philo->init->time);
-		if (philo->init->stop_simul == 1)
-		{
-			pthread_mutex_unlock(&philo->init->time);
-			break ;
-		}
-		pthread_mutex_unlock(&philo->init->time);
-		usleep(50);
-	}
+	int i;
+
+	i = 0;
+	while (pthread_join(th[i++], NULL) == 0)
+		;
+	free (init->forks);
 }

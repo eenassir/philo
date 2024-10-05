@@ -6,7 +6,7 @@
 /*   By: eenassir <eenassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 12:19:26 by eenassir          #+#    #+#             */
-/*   Updated: 2024/09/23 14:41:42 by eenassir         ###   ########.fr       */
+/*   Updated: 2024/10/05 13:59:25 by eenassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	ft_parcing(int ac, char **av)
 		while (av[i][j])
 		{
 			if (!(av[i][j] >= '0' && av[i][j] <= '9') && av[i][0] != '+')
-				return (printf ("Error\n"), -1);
+				return (-1);
 			j++;
 		}
 		i++;

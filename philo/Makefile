@@ -4,7 +4,7 @@ utils = utils/ft_strlen.c utils/ft_atoi.c
 
 SRC = philo.c philo_utils/get_current_time.c philo_utils/ft_usleep.c \
 philo_utils/ft_monitor.c philo_utils/print_msg.c philo_utils/ft_parcing.c\
-philo_utils/ft_num.c philo_utils/ft_loop.c
+philo_utils/ft_num.c philo_utils/ft_loop.c philo_utils/join.c
 
 OBJ = $(SRC:.c=.o) $(utils:.c=.o)
 

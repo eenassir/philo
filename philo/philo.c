@@ -6,7 +6,7 @@
 /*   By: eenassir <eenassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 21:04:57 by eenassir          #+#    #+#             */
-/*   Updated: 2024/09/23 14:40:57 by eenassir         ###   ########.fr       */
+/*   Updated: 2024/10/05 14:01:39 by eenassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,11 @@ void	ft_life(t_list *philo)
 	philo->last_meal = (get_current_time() - philo->run);
 	pthread_mutex_unlock(&philo->init->time);
 	print_msg("is eating", philo);
-	ft_usleep(philo->time_to_eat);
+	ft_usleep(philo->time_to_eat, philo);
 	pthread_mutex_unlock(philo->right_fork);
 	pthread_mutex_unlock(philo->left_fork);
 	print_msg("is sleeping", philo);
-	ft_usleep(philo->time_to_sleep);
+	ft_usleep(philo->time_to_sleep, philo);
 	print_msg("is thinking", philo);
 }
 
@@ -62,6 +62,7 @@ void	*life_cycle(void *arg)
 int	ft_philo(t_init *init)
 {
 	int			i;
+	int			ret;
 	pthread_t	th[200];
 	t_list		philo[200];
 
@@ -73,17 +74,16 @@ int	ft_philo(t_init *init)
 	i = -1;
 	while (++i < init->num_philo)
 	{
-		if (pthread_create(&th[i], NULL, life_cycle, &philo[i]) == -1)
-			return (printf ("Error\n"), -1);
+		ret = pthread_create(&th[i], NULL, life_cycle, &philo[i]);
+		if (ret != 0)
+		{
+			join(th, init);
+			return (1);
+		}
 	}
-	i = -1;
+	i = 0;
 	ft_monitor(philo);
-	while (++i < init->num_philo)
-	{
-		if (pthread_join(th[i], NULL) == -1)
-			return (printf ("Error\n"), -1);
-	}
-	free (init->forks);
+	join(th, init);
 	return (0);
 }
 
@@ -92,16 +92,12 @@ int	main(int ac, char **av)
 	t_init	init;
 
 	if (ac != 5 && ac != 6)
-	{
-		printf("The number of arguments isn't \
-		the expected nbr to run the simulation!\n");
-		return (1);
-	}
+		return (printf ("Error\n"), 1);
 	if (ft_parcing(ac, av) == -1)
-		return (1);
+		return (printf ("Error\n"), 1);
 	if (ft_num(ac, av, &init) == -1)
 		return (printf("Error\n"), 1);
-	if (ft_philo(&init))
+	if (ft_philo(&init) == 1)
 		return (printf ("Error\n"), 1);
 	return (0);
 }

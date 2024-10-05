@@ -1,32 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_usleep.c                                        :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eenassir <eenassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/21 10:28:11 by eenassir          #+#    #+#             */
-/*   Updated: 2024/10/05 13:24:16 by eenassir         ###   ########.fr       */
+/*   Created: 2024/07/24 10:21:15 by eenassir          #+#    #+#             */
+/*   Updated: 2024/09/21 15:08:53 by eenassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/philo.h"
+#include "../includes/utils.h"
 
-void	ft_usleep(long time, t_list *philo)
+int	ft_strlen(char *s)
 {
-	long	start;
-	
-	
-	start = get_current_time();
-	while ((get_current_time() - start) < time)
-	{
-		pthread_mutex_lock(&philo->init->time);
-		if (philo->init->stop_simul == 1)
-		{
-			pthread_mutex_unlock(&philo->init->time);
-			break ;
-		}
-		pthread_mutex_unlock(&philo->init->time);
-		usleep(50);
-	}
+	int	i;
+
+	i = 0;
+	while (s[i])
+		i++;
+	return (i);
 }

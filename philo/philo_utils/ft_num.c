@@ -6,7 +6,7 @@
 /*   By: eenassir <eenassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 12:21:29 by eenassir          #+#    #+#             */
-/*   Updated: 2024/09/23 14:30:01 by eenassir         ###   ########.fr       */
+/*   Updated: 2024/10/04 21:14:12 by eenassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,11 @@ int	ft_num(int ac, char **av, t_init *init)
 	if (init->time_to_sleep < 60 || init->time_to_sleep == -1)
 		return (-1);
 	if (ac == 6)
+	{
 		init->n_meals_must_eat = ft_atoi(av[5]);
+		if (init->n_meals_must_eat == -1)
+			return (-1);
+	}
 	else
 		init->n_meals_must_eat = -1;
 	init->stop_simul = 0;
