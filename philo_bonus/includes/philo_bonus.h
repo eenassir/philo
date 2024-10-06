@@ -6,7 +6,7 @@
 /*   By: eenassir <eenassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 14:55:46 by eenassir          #+#    #+#             */
-/*   Updated: 2024/10/05 14:46:00 by eenassir         ###   ########.fr       */
+/*   Updated: 2024/10/05 22:24:06 by eenassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ typedef struct s_data
 	int 	time_to_die;
 	int 	time_to_eat;
 	int 	time_to_sleep;
-	long 	run_time;
+	long long	run_time;
 	int		stop_sim;
 } t_data;
 

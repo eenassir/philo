@@ -6,7 +6,7 @@
 /*   By: eenassir <eenassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 21:04:57 by eenassir          #+#    #+#             */
-/*   Updated: 2024/10/05 14:01:39 by eenassir         ###   ########.fr       */
+/*   Updated: 2024/10/05 23:58:52 by eenassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	ft_life(t_list *philo)
 	philo->n_meals_must_eat--;
 	pthread_mutex_unlock(&philo->init->lock);
 	pthread_mutex_lock(&philo->init->time);
-	philo->last_meal = (get_current_time() - philo->run);
+	philo->last_meal = get_current_time();
 	pthread_mutex_unlock(&philo->init->time);
 	print_msg("is eating", philo);
 	ft_usleep(philo->time_to_eat, philo);

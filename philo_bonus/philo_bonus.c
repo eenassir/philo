@@ -6,7 +6,7 @@
 /*   By: eenassir <eenassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 14:58:18 by eenassir          #+#    #+#             */
-/*   Updated: 2024/10/05 15:58:44 by eenassir         ###   ########.fr       */
+/*   Updated: 2024/10/06 09:32:20 by eenassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,10 @@ void ft_usleep(long time)
 
 void ft_printf(char *s, t_list *philo)
 {
-	if (philo->data->stop_sim == 0)
-	{
 		sem_wait(philo->data->sem_w);
-		printf ("%ld %d %s\n", (g_c_t() - philo->data->run_time), philo->id, s);
-		sem_post(philo->data->sem_w);
-	}
+			printf ("%lld %d %s\n", (g_c_t() - philo->data->run_time), philo->id, s);
+		if (philo->data->stop_sim == 0)
+			sem_post(philo->data->sem_w);
 }
 
 void *ft_monitor(void *arg)
@@ -44,52 +42,48 @@ void *ft_monitor(void *arg)
 	t_list *philo;
 
 	philo = (t_list *)arg;
-	int i;
-
-	i = 0;
-		while (i < philo->data->num)
-		{
+	while (1)
+	{
 			sem_wait(philo->data->sem_time);
-			if ((g_c_t() - philo->data->run_time) - philo[i].last_meal_time >= philo->data->time_to_die)
+			if (g_c_t() - philo->last_meal_time > philo->data->time_to_die)
 			{
+				
 				philo->data->stop_sim = 1;
-				printf ("%ld %d is died\n", (g_c_t() - philo->data->run_time), philo[i].id);
-				sem_post(philo->data->sem_time);
+				sem_post(philo->data->sem_death);
+				ft_printf("is died", philo);
 				return (NULL);
 			}
 			sem_post(philo->data->sem_time);
-			i++;
-		}
+	}
 	return (NULL);
 }
 
 
 void life(t_list *philo)
 {
+	if (philo->id % 2 == 0)
+		ft_usleep(philo->data->time_to_eat);
+	pthread_create(&philo->lock, NULL, ft_monitor, philo);
+	pthread_detach(philo->lock);
 	while (1)
 	{
-		sem_wait(philo->data->sem_time);
-		if (philo->data->stop_sim == 1)
-		{
-			sem_post(philo->data->sem_time);
-			exit (0);
-		}
-		sem_post(philo->data->sem_time);
-		sem_wait(philo->data->fork);
-		ft_printf("has take a fork", philo);
 		sem_wait(philo->data->fork);
 		ft_printf("has take a fork", philo);
 		
-		ft_printf("is eating", philo);
+		sem_wait(philo->data->fork);
+		ft_printf("has take a fork", philo);
+		
 		sem_wait(philo->data->sem_time);
-		philo->last_meal_time = g_c_t() - philo->data->run_time;
+		ft_printf("is eating", philo);
+		philo->last_meal_time = g_c_t();
 		philo->meals_must_eat--;
 		sem_post(philo->data->sem_time);
-		
 		ft_usleep(philo->data->time_to_eat);
 		
+		
 		sem_post(philo->data->fork);
 		sem_post(philo->data->fork);
+		
 		ft_printf("is sleeping", philo);
 		ft_usleep(philo->data->time_to_sleep);
 		ft_printf("is thinking", philo);
@@ -125,18 +119,19 @@ void ft_init(int *infos)
 	part->time_to_die = infos[1];
 	part->time_to_eat = infos[2];
 	part->time_to_sleep = infos[3];
+	part->run_time = g_c_t();
+	part->stop_sim = 0;
 	i = 0;
 	while (i < infos[0])
 	{
 		philo[i].id = i + 1;
+		philo[i].last_meal_time = g_c_t();
 		philo[i].meals_must_eat = infos[4];
 		philo[i].data = part;
 		i++;
 	}
-	part->run_time = g_c_t();
-	part->stop_sim = 0;
-		ft_monitor(philo);
 	i = 0;
+	sem_wait(philo->data->sem_death);
 	while (i < infos[0])
 	{
 		philo[i].pid = fork();
@@ -146,19 +141,28 @@ void ft_init(int *infos)
 			return ;
 		}
 		else if (philo[i].pid == 0)
-		{
 			life(&philo[i]);
-			pthread_create(&philo[i].lock, NULL, ft_monitor, philo);
-		}
 		i++;
 	}
-	while (wait(NULL) != -1)
-		;
+	sem_wait(philo->data->sem_death);
+	i = 0;
+	while (i < infos[0])
+	{
+		kill(philo[i].pid, SIGKILL);
+		i++;
+	}
+	i = 0;
+	while (i < infos[0])
+	{
+		waitpid(philo[i].pid, NULL, 0);
+		i++;
+	}
 }
 
 int main(int ac, char **av)
 {
 	int infos[5];
+	
 	infos[0] = ft_atoi(av[1]);
 	infos[1] = ft_atoi(av[2]);
 	infos[2] = ft_atoi(av[3]);
