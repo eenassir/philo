@@ -6,7 +6,7 @@
 /*   By: eenassir <eenassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 11:36:32 by eenassir          #+#    #+#             */
-/*   Updated: 2024/10/05 23:58:21 by eenassir         ###   ########.fr       */
+/*   Updated: 2024/10/06 11:17:05 by eenassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ void	*ft_monitor(void *arg)
 		while (++i < philo->init->num_philo)
 		{
 			pthread_mutex_lock(&philo->init->time);
-			if ((get_current_time() - \
-			philo[i].last_meal) > philo->time_to_die)
+			if (((get_current_time() - philo->run - \
+			philo[i].last_meal)) >= philo->time_to_die)
 			{
 				philo->init->stop_simul = 1;
 				printf ("%lld %d died\n", \
