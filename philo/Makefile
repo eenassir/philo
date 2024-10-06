@@ -10,7 +10,7 @@ OBJ = $(SRC:.c=.o) $(utils:.c=.o)
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g
+CFLAGS = -Wall -Wextra -Werror
 
 all:$(NAME)
 
