@@ -6,7 +6,7 @@
 /*   By: eenassir <eenassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 21:04:57 by eenassir          #+#    #+#             */
-/*   Updated: 2024/10/06 11:16:18 by eenassir         ###   ########.fr       */
+/*   Updated: 2024/10/07 22:32:01 by eenassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	*life_cycle(void *arg)
 
 	philo = (t_list *)arg;
 	if (philo->id % 2 == 0)
-		usleep(1000);
+		usleep(philo->time_to_eat);
 	while (1)
 	{
 		pthread_mutex_lock(&philo->init->time);

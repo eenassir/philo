@@ -6,7 +6,7 @@
 /*   By: eenassir <eenassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 11:36:32 by eenassir          #+#    #+#             */
-/*   Updated: 2024/10/06 21:52:58 by eenassir         ###   ########.fr       */
+/*   Updated: 2024/10/07 22:35:40 by eenassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ void	*ft_monitor(void *arg)
 			}
 			pthread_mutex_unlock(&philo->init->time);
 		}
-		usleep(1000);
 	}
 	return (NULL);
 }
